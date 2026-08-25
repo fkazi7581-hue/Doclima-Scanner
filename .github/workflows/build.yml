@@ -29,6 +29,12 @@ jobs:
     - name: Create Android files if missing
       run: flutter create . --platforms=android --org com.example
 
+    - name: Update Android Compile SDK to 34
+      run: |
+        sed -i 's/compileSdkVersion flutter.compileSdkVersion/compileSdkVersion 34/g' android/app/build.gradle || true
+        sed -i 's/targetSdkVersion flutter.targetSdkVersion/targetSdkVersion 34/g' android/app/build.gradle || true
+        sed -i 's/minSdkVersion.*/minSdkVersion 21/g' android/app/build.gradle || true
+
     - name: Build APK
       run: flutter build apk --release
 
