@@ -29,24 +29,8 @@ jobs:
     - name: Create Android files if missing
       run: flutter create . --platforms=android --org com.example
 
-    - name: Force Android SDK 34
-      run: |
-        GRADLE_FILE="android/app/build.gradle"
-        if [ -f "$GRADLE_FILE" ]; then
-          sed -i 's/compileSdkVersion.*/compileSdkVersion 34/g' $GRADLE_FILE
-          sed -i 's/targetSdkVersion.*/targetSdkVersion 34/g' $GRADLE_FILE
-          sed -i 's/minSdkVersion.*/minSdkVersion 21/g' $GRADLE_FILE
-        fi
-        
-        KTS_FILE="android/app/build.gradle.kts"
-        if [ -f "$KTS_FILE" ]; then
-          sed -i 's/compileSdk =.*/compileSdk = 34/g' $KTS_FILE
-          sed -i 's/targetSdk =.*/targetSdk = 34/g' $KTS_FILE
-          sed -i 's/minSdk =.*/minSdk = 21/g' $KTS_FILE
-        fi
-
     - name: Build APK
-      run: flutter build apk --release
+      run: flutter build apk --release --target-platform android-arm64
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
