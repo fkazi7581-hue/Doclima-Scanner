@@ -29,8 +29,20 @@ jobs:
     - name: Create Android files if missing
       run: flutter create . --platforms=android --org com.example
 
+    - name: Fix Android SDK Versions
+      run: |
+        GRADLE_PATH="android/app/build.gradle"
+        if [ -f "$GRADLE_PATH" ]; then
+          echo "android { compileSdkVersion 34 default { targetSdkVersion 34 minSdk 21 } }" >> $GRADLE_PATH
+        fi
+        
+        KTS_PATH="android/app/build.gradle.kts"
+        if [ -f "$KTS_PATH" ]; then
+          echo "android { compileSdk = 34 default { targetSdk = 34 minSdk = 21 } }" >> $KTS_PATH
+        fi
+
     - name: Build APK
-      run: flutter build apk --release --target-platform android-arm64
+      run: flutter build apk --release
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
